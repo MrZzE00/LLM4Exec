@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formation LLM - Plateforme d'Apprentissage</title>
+    <meta name="description" content="Plateforme de formation aux modèles de langage (LLM) avec modules interactifs et bibliothèque de prompts">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="icon" href="assets/images/logo.svg" type="image/svg+xml">
+</head>
+<body>
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+    
+    <div class="app-container">
+        <!-- Sidebar with menu -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-title">Formation LLM</div>
+                <button class="close-menu" id="closeMenu" aria-label="Fermer le menu">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="sidebar-content" id="sidebarContent">
+                <!-- Le contenu du menu sera injecté ici par JavaScript -->
+            </div>
+        </aside>
+
+        <!-- Main content area -->
+        <main class="main-content">
+            <!-- Burger Menu Button déplacé à l'intérieur de main-content -->
+            <button class="burger-menu" id="burgerMenu" aria-label="Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <!-- Bouton bibliothèque -->
+            <button class="library-button" id="libraryButton" aria-label="Bibliothèque de prompts">
+                <i class="fas fa-book"></i>
+            </button>
+            
+            <div id="contentContainer" class="content-container">
+                <h1 class="page-title">Formation LLM</h1>
+                <p class="page-description">Sélectionnez un module dans le menu pour commencer votre apprentissage.</p>
+                
+                <div id="content" class="content">
+                    <div class="welcome-screen">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="welcome-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        </svg>
+                        <p class="welcome-text">Choisissez un cours dans le menu pour commencer</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Templates -->
+    <template id="prompt-library-template">
+        <div class="prompt-library">
+            <div class="prompt-library-header">
+                <h2 class="prompt-library-title">Bibliothèque de Prompts</h2>
+                <p class="prompt-library-description">Une collection de prompts professionnels prêts à l'emploi pour optimiser votre travail.</p>
+                
+                <!-- Barre de recherche -->
+                <div class="search-container">
+                    <input type="text" id="prompt-search" placeholder="Rechercher un prompt..." 
+                           class="search-input">
+                    <button id="search-button" class="search-button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                
+                <!-- Filtres par catégorie -->
+                <div class="filter-container">
+                    <h3 class="filter-title">Filtrer par catégorie</h3>
+                    <div class="filter-buttons" id="categoryFilters">
+                        <!-- Les filtres seront injectés ici par JavaScript -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Liste des prompts -->
+            <div id="prompts-container" class="prompts-grid">
+                <!-- Les prompts seront injectés ici par JavaScript -->
+            </div>
+        </div>
+    </template>
+
+    <!-- Scripts -->
+    <script src="assets/js/data/modules.js"></script>
+    <script src="assets/js/data/prompts.js"></script>
+    <script src="assets/js/modules/sidebar.js"></script>
+    <script src="assets/js/modules/content-loader.js"></script>
+    <script src="assets/js/modules/prompt-library.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html> 

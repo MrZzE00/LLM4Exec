@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formation LLM - Amplifiez votre expertise</title>
+    <meta name="description" content="Plateforme de formation aux modèles de langage (LLM) avec modules interactifs et bibliothèque de prompts">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/welcome.css">
+    <link rel="icon" href="assets/images/logo.svg" type="image/svg+xml">
+</head>
+<body>
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+    
+    <div class="app-container">
+        <!-- Sidebar with menu -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="welcome.html" class="sidebar-title home-link-text">
+                    <i class="fas fa-home"></i> Formation LLM
+                </a>
+                <button class="close-menu" id="closeMenu" aria-label="Fermer le menu">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="sidebar-content" id="sidebarContent">
+                <!-- Le contenu du menu sera injecté ici par JavaScript -->
+            </div>
+        </aside>
+
+        <!-- Main content area -->
+        <main class="main-content">
+            <!-- Burger Menu Button -->
+            <button class="burger-menu" id="burgerMenu" aria-label="Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <!-- Bouton bibliothèque -->
+            <button class="library-button" id="libraryButton" aria-label="Bibliothèque de prompts">
+                <i class="fas fa-book"></i>
+            </button>
+            
+            <div id="contentContainer" class="content-container welcome-page">
+                <!-- Bandeau d'entête -->
+                <section class="hero-section">
+                    <h1 class="hero-title">Maîtrisez les LLM et transformez votre travail</h1>
+                    <p class="hero-subtitle">Développez des compétences avancées en IA générative et gagnez jusqu'à 30% de productivité</p>
+                    <button class="cta-button" id="startLearningBtn">
+                        <span>Commencer la formation</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </section>
+                
+                <!-- Points clés / Bénéfices -->
+                <section class="benefits-section">
+                    <h2 class="section-title">Pourquoi cette formation ?</h2>
+                    
+                    <div class="benefits-grid">
+                        <div class="benefit-card">
+                            <div class="benefit-icon">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <h3 class="benefit-title">Productivité amplifiée</h3>
+                            <p class="benefit-description">Automatisez les tâches répétitives et concentrez-vous sur la valeur ajoutée de votre expertise.</p>
+                        </div>
+                        
+                        <div class="benefit-card">
+                            <div class="benefit-icon">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <h3 class="benefit-title">Créativité augmentée</h3>
+                            <p class="benefit-description">Explorez de nouvelles idées et perspectives grâce à la puissance des modèles génératifs.</p>
+                        </div>
+                        
+                        <div class="benefit-card">
+                            <div class="benefit-icon">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <h3 class="benefit-title">Compétence d'avenir</h3>
+                            <p class="benefit-description">Maîtrisez une technologie transformative qui redéfinit tous les métiers de la connaissance.</p>
+                        </div>
+                        
+                        <div class="benefit-card">
+                            <div class="benefit-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h3 class="benefit-title">Résultats mesurables</h3>
+                            <p class="benefit-description">Obtenez des gains concrets et quantifiables dès les premières semaines d'application.</p>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Témoignage -->
+                <section class="testimonial-section">
+                    <div class="testimonial-container">
+                        <div class="testimonial-quote">
+                            <i class="fas fa-quote-left"></i>
+                        </div>
+                        <p class="testimonial-text">Après avoir suivi cette formation, j'ai complètement transformé ma façon de travailler. Les tâches qui me prenaient des heures sont maintenant réalisées en quelques minutes, et la qualité de mes livrables s'est considérablement améliorée.</p>
+                        <div class="testimonial-author">
+                            <div class="testimonial-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="testimonial-info">
+                                <p class="testimonial-name">Sophie Martin</p>
+                                <p class="testimonial-position">Directrice Marketing, Entreprise XYZ</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Fonctionnalités phares -->
+                <section class="features-section">
+                    <h2 class="section-title">Ce que vous allez apprendre</h2>
+                    
+                    <div class="features-grid">
+<<<<<<< HEAD
+                        <div class="feature-card">
+                            <div class="feature-image">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <h3 class="feature-title">Dialoguer efficacement avec les LLM</h3>
+                            <p class="feature-description">Maîtrisez l'art de formuler des instructions claires et précises pour obtenir exactement ce dont vous avez besoin.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-image">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <h3 class="feature-title">Créer du contenu de qualité</h3>
+                            <p class="feature-description">Générez des textes, analyses et rapports professionnels en une fraction du temps habituel.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-image">
+                                <i class="fas fa-lightbulb"></i>
+                            </div>
+                            <h3 class="feature-title">Résoudre des problèmes complexes</h3>
+                            <p class="feature-description">Utilisez les LLM comme partenaires de réflexion pour aborder des défis sous de nouveaux angles.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-image">
+                                <i class="fas fa-cogs"></i>
+                            </div>
+                            <h3 class="feature-title">Intégrer l'IA dans votre workflow</h3>
+                            <p class="feature-description">Développez une routine professionnelle optimisée où l'IA devient votre assistant quotidien.</p>
+=======
+                        <div class="benefit-card">
+                            <div class="benefit-icon">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <h3 class="benefit-title">Dialoguer efficacement avec les LLM</h3>
+                            <p class="benefit-description">Maîtrisez l'art de formuler des instructions claires et précises pour obtenir exactement ce dont vous avez besoin.</p>
+                        </div>
+                        
+                        <div class="benefit-card">
+                            <div class="benefit-icon">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <h3 class="benefit-title">Créer du contenu de qualité</h3>
+                            <p class="benefit-description">Générez des textes, analyses et rapports professionnels en une fraction du temps habituel.</p>
+                        </div>
+                        
+                        <div class="benefit-card">
+                            <div class="benefit-icon">
+                                <i class="fas fa-lightbulb"></i>
+                            </div>
+                            <h3 class="benefit-title">Résoudre des problèmes complexes</h3>
+                            <p class="benefit-description">Utilisez les LLM comme partenaires de réflexion pour aborder des défis sous de nouveaux angles.</p>
+                        </div>
+                        
+                        <div class="benefit-card">
+                            <div class="benefit-icon">
+                                <i class="fas fa-cogs"></i>
+                            </div>
+                            <h3 class="benefit-title">Intégrer l'IA dans votre workflow</h3>
+                            <p class="benefit-description">Développez une routine professionnelle optimisée où l'IA devient votre assistant quotidien.</p>
+>>>>>>> 23bb486 (MaJ projet LLM4Exec)
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Appel à l'action final -->
+                <section class="final-cta-section">
+                    <h2 class="final-cta-title">Prêt à transformer votre façon de travailler ?</h2>
+                    <p class="final-cta-subtitle">Rejoignez des milliers de professionnels qui ont déjà adopté cette approche innovante</p>
+                    <button class="cta-button large" id="finalCtaBtn">
+                        <span>Démarrer maintenant</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/data/modules.js"></script>
+    <script src="assets/js/data/prompts.js"></script>
+    <script src="assets/js/modules/sidebar.js"></script>
+    <script src="assets/js/modules/content-loader.js"></script>
+    <script src="assets/js/modules/prompt-library.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script>
+        // Script pour les boutons d'action de la page d'accueil
+        document.addEventListener('DOMContentLoaded', () => {
+            const startLearningBtn = document.getElementById('startLearningBtn');
+            const finalCtaBtn = document.getElementById('finalCtaBtn');
+            
+            // Fonction pour démarrer la formation (ouvrir le premier module)
+            const startLearning = () => {
+                // Ouvrir le menu
+                window.sidebarInstance.openSidebar();
+                
+                // Sélectionner le premier module après un court délai
+                setTimeout(() => {
+                    const firstModuleLink = document.querySelector('.sub-item a[data-id="1.1"]');
+                    if (firstModuleLink) {
+                        firstModuleLink.click();
+                    }
+                }, 500);
+            };
+            
+            // Ajouter les écouteurs d'événements
+            if (startLearningBtn) startLearningBtn.addEventListener('click', startLearning);
+            if (finalCtaBtn) finalCtaBtn.addEventListener('click', startLearning);
+        });
+    </script>
+</body>
+</html> 

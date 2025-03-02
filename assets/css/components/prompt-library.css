@@ -1,0 +1,179 @@
+.prompt-library {
+    height: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.prompt-library-header {
+    margin-bottom: 1.5rem;
+}
+
+.prompt-library-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.prompt-library-description {
+    color: var(--color-text-tertiary);
+    margin-bottom: 1.5rem;
+}
+
+.search-container {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.search-input {
+    width: 100%;
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+    padding: 0.75rem 1rem;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--color-border);
+    outline: none;
+    transition: all var(--transition-speed);
+}
+
+.search-input:focus {
+    border-color: var(--color-accent-primary);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+.search-button {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--color-text-tertiary);
+    cursor: pointer;
+}
+
+.filter-container {
+    margin-bottom: 1.5rem;
+}
+
+.filter-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.category-filter {
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+    border: none;
+    cursor: pointer;
+    transition: all var(--transition-speed);
+}
+
+.category-filter.active {
+    background-color: var(--color-accent-primary);
+}
+
+.category-filter:hover:not(.active) {
+    background-color: var(--color-bg-quaternary);
+}
+
+.prompts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+    max-height: 60vh;
+}
+
+.prompt-card {
+    background-color: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    transition: all var(--transition-speed) ease;
+}
+
+.prompt-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-color: var(--color-accent-primary);
+}
+
+.prompt-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+}
+
+.prompt-card-categories {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.prompt-category {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    background-color: var(--color-bg-quaternary);
+    color: var(--color-accent-primary);
+    display: inline-block;
+}
+
+.prompt-subcategory {
+    font-size: 0.75rem;
+    color: var(--color-text-tertiary);
+}
+
+.prompt-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.prompt-action-button {
+    background: none;
+    border: none;
+    color: var(--color-text-tertiary);
+    cursor: pointer;
+    transition: color var(--transition-speed);
+    padding: 0.25rem;
+}
+
+.prompt-action-button:hover {
+    color: var(--color-text-primary);
+}
+
+.prompt-action-button.saved {
+    color: #fbbf24; /* Yellow */
+}
+
+.prompt-action-button.copied {
+    color: #34d399; /* Green */
+}
+
+.prompt-text {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--color-text-secondary);
+}
+
+/* Empty state */
+.empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: var(--color-text-tertiary);
+    grid-column: 1 / -1;
+} 
