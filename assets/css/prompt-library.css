@@ -1,0 +1,118 @@
+.prompt-library {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.prompt-category {
+    margin-bottom: 3rem;
+}
+
+.category-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--accent);
+}
+
+.prompts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.prompt-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.prompt-card:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.prompt-subcategory {
+    font-size: 0.875rem;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.prompt-text {
+    color: var(--text-primary);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.copy-button {
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.copy-button:hover {
+    background: #2563eb;
+}
+
+.copy-button.copied {
+    background: #059669;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .prompt-library {
+        padding: 1rem;
+    }
+
+    .prompts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .category-title {
+        font-size: 1.25rem;
+    }
+}
+
+/* Menu responsive */
+@media (max-width: 640px) {
+    :root {
+        --menu-width: 100%;
+    }
+
+    .training-container {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        position: fixed;
+        left: -100%;
+        width: 100%;
+        z-index: 1000;
+        transition: left 0.3s ease;
+    }
+
+    .training-container:not(.fullscreen) .sidebar {
+        left: 0;
+    }
+
+    .burger-menu {
+        display: flex !important;
+    }
+} 

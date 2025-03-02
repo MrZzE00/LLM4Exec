@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bibliothèque de Prompts</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-bg: #0f172a;
+            --secondary-bg: #1e293b;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --accent: #3b82f6;
+        }
+
+        body {
+            background-color: var(--primary-bg);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 2rem;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-top: 4rem;
+        }
+
+        h1 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
+            font-size: 1.75rem;
+            background: linear-gradient(135deg, #60A5FA, #3B82F6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+        }
+
+        .prompts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .prompt-card {
+            background: linear-gradient(180deg, var(--secondary-bg) 0%, rgba(30, 41, 59, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .prompt-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .prompt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .category-name {
+            color: var(--accent);
+            font-size: 0.875rem;
+            font-weight: 600;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .subcategory {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .prompt-text {
+            color: var(--text-primary);
+            font-size: 0.9375rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .copy-button {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            border-radius: 0.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+        }
+
+        .copy-button:hover {
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--accent);
+            transform: translateY(-1px);
+        }
+
+        .copy-button.copied {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .back-button {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(59, 130, 246, 0.9);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            color: white;
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .back-button:hover {
+            background: rgba(59, 130, 246, 1);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .prompts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding-top: 3rem;
+            }
+        }
+
+        .search-and-filters {
+            margin-bottom: 2rem;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: var(--secondary-bg);
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+        }
+
+        .search-bar i {
+            color: var(--text-secondary);
+            margin-right: 0.5rem;
+        }
+
+        .search-bar input {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        .filters {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .filter-button {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0;
+            font: inherit;
+            outline: inherit;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .filter-button.active {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <!-- Ajouter le bouton retour -->
+    <a href="training-llm-exec.html" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+        <span>Retour à la formation</span>
+    </a>
+
+    <div class="container">
+        <h1>Bibliothèque de Prompts</h1>
+        <div class="search-and-filters">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" id="prompt-search" placeholder="Rechercher un prompt...">
+            </div>
+            
+            <div class="filters">
+                <button class="filter-button active" data-category="all">
+                    <i class="fas fa-th-large"></i>
+                    <span>Tous</span>
+                </button>
+                <button class="filter-button" data-category="strategie">
+                    <i class="fas fa-chess"></i>
+                    <span>Stratégie</span>
+                </button>
+                <button class="filter-button" data-category="leadership">
+                    <i class="fas fa-users"></i>
+                    <span>Leadership</span>
+                </button>
+                <button class="filter-button" data-category="communication">
+                    <i class="fas fa-comments"></i>
+                    <span>Communication</span>
+                </button>
+                <button class="filter-button" data-category="productivite">
+                    <i class="fas fa-tasks"></i>
+                    <span>Productivité</span>
+                </button>
+                <button class="filter-button" data-category="innovation">
+                    <i class="fas fa-lightbulb"></i>
+                    <span>Innovation</span>
+                </button>
+                <button class="filter-button" data-category="finance">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Finance</span>
+                </button>
+                <button class="filter-button" data-category="fabric">
+                    <i class="fas fa-cube"></i>
+                    <span>Fabric</span>
+                </button>
+            </div>
+        </div>
+        <div class="prompts-grid" id="prompts-container">
+            <!-- Les prompts seront générés ici par JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // Fonction pour copier sans utiliser le stockage
+        function copyPrompt(button, text) {
+            try {
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                const icon = button.querySelector('i');
+                button.classList.add('copied');
+                icon.className = 'fas fa-check';
+                
+                setTimeout(() => {
+                    button.classList.remove('copied');
+                    icon.className = 'fas fa-copy';
+                }, 2000);
+            } catch (err) {
+                console.error('Erreur lors de la copie:', err);
+            }
+        }
+
+        // Base de données des prompts
+        const promptsDatabase = [
+            // Stratégie
+            {
+                id: "s1",
+                category: "strategie",
+                categoryName: "Prise de Décision Stratégique",
+                subcategory: "Analyse de marché et tendances",
+                text: "Identifie les trois transformations économiques, technologiques et sociétales les plus influentes sur le marché [secteur] d'ici 5 ans. Propose des scénarios d'adaptation et les ressources nécessaires pour chaque stratégie."
+            },
+            {
+                id: "s2",
+                category: "strategie",
+                categoryName: "Prise de Décision Stratégique",
+                subcategory: "Analyse de marché et tendances",
+                text: "Compare les stratégies de croissance de [3 concurrents] sur les cinq dernières années. Dégage les tendances clés, les erreurs à éviter et les opportunités sous-exploitées dans notre secteur."
+            },
+            {
+                id: "s3",
+                category: "strategie",
+                categoryName: "Prise de Décision Stratégique",
+                subcategory: "Analyse de marché et tendances",
+                text: "Rédige une analyse comparative des dernières innovations disruptives en [secteur] et leur impact sur notre chaîne de valeur, expérience client et compétitivité."
+            },
+            {
+                id: "s4",
+                category: "strategie",
+                categoryName: "Prise de Décision Stratégique",
+                subcategory: "Analyse de marché et tendances",
+                text: "Évalue les évolutions comportementales des consommateurs dans [secteur] et propose trois nouvelles offres alignées sur ces attentes émergentes."
+            },
+            {
+                id: "s5",
+                category: "strategie",
+                categoryName: "Prise de Décision Stratégique",
+                subcategory: "Analyse de marché et tendances",
+                text: "Identifie les marchés émergents les plus attractifs pour une expansion internationale, en évaluant les facteurs de risque, les coûts d'entrée et les avantages concurrentiels potentiels."
+            },
+            {
+                id: "s6",
+                category: "strategie",
+                categoryName: "Prise de Décision Stratégique",
+                subcategory: "Analyse de marché et tendances",
+                text: "Simule un scénario de crise majeure affectant notre secteur (ex. rupture d'approvisionnement, nouvelle réglementation). Développe un plan de contingence détaillé avec actions préventives et mesures correctives."
+            },
+            {
+                id: "s7",
+                category: "strategie",
+                categoryName: "Prise de Décision Stratégique",
+                subcategory: "Analyse de marché et tendances",
+                text: "Évalue l'impact des nouvelles régulations sur notre modèle d'affaires. Propose des stratégies de conformité proactives tout en conservant un avantage concurrentiel."
+            },
+            
+            // Leadership
+            {
+                id: "l1",
+                category: "leadership",
+                categoryName: "Leadership et Gestion d'Équipe",
+                subcategory: "Mobilisation, cohésion et transformation",
+                text: "Crée un message puissant destiné aux équipes après une année difficile, en insistant sur la résilience, les apprentissages et la vision d'avenir."
+            },
+            {
+                id: "l2",
+                category: "leadership",
+                categoryName: "Leadership et Gestion d'Équipe",
+                subcategory: "Mobilisation, cohésion et transformation",
+                text: "Structure un discours d'alignement stratégique pour une réunion trimestrielle, en mettant en avant les priorités clés, les succès récents et les défis à venir."
+            },
+            {
+                id: "l3",
+                category: "leadership",
+                categoryName: "Leadership et Gestion d'Équipe",
+                subcategory: "Mobilisation, cohésion et transformation",
+                text: "Rédige une annonce engageante pour mobiliser les équipes autour d'un grand projet de transformation, en insistant sur les bénéfices individuels et collectifs."
+            },
+            {
+                id: "l4",
+                category: "leadership",
+                categoryName: "Leadership et Gestion d'Équipe",
+                subcategory: "Mobilisation, cohésion et transformation",
+                text: "Crée une intervention destinée à remobiliser une équipe en perte de motivation. Identifie les freins existants et propose des leviers d'engagement concrets."
+            },
+            {
+                id: "l5",
+                category: "leadership",
+                categoryName: "Leadership et Gestion d'Équipe",
+                subcategory: "Mobilisation, cohésion et transformation",
+                text: "Développe une feuille de route opérationnelle pour que les managers intermédiaires déclinent notre vision stratégique en actions terrain."
+            },
+            {
+                id: "l6",
+                category: "leadership",
+                categoryName: "Leadership et Gestion d'Équipe",
+                subcategory: "Mobilisation, cohésion et transformation",
+                text: "Élabore un plan de communication interne pour accompagner la transition vers une nouvelle culture d'entreprise et en assurer l'adoption durable."
+            },
+            {
+                id: "l7",
+                category: "leadership",
+                categoryName: "Leadership et Gestion d'Équipe",
+                subcategory: "Mobilisation, cohésion et transformation",
+                text: "Conçois un programme de mentorat interne pour accélérer la montée en compétences des talents à fort potentiel et renforcer la rétention des leaders de demain."
+            },
+            
+            // Communication
+            {
+                id: "c1",
+                category: "communication",
+                categoryName: "Communication et Influence",
+                subcategory: "Prise de parole, discours et influence externe",
+                text: "Rédige un discours percutant pour un événement corporate mettant en avant notre engagement en matière d'innovation, d'éthique et de transformation digitale."
+            },
+            {
+                id: "c2",
+                category: "communication",
+                categoryName: "Communication et Influence",
+                subcategory: "Prise de parole, discours et influence externe",
+                text: "Prépare un argumentaire convaincant pour attirer un investisseur stratégique, en mettant en avant les indicateurs de croissance, les avantages concurrentiels et la roadmap future."
+            },
+            {
+                id: "c3",
+                category: "communication",
+                categoryName: "Communication et Influence",
+                subcategory: "Prise de parole, discours et influence externe",
+                text: "Conçois une réponse officielle de gestion de crise pour une polémique médiatique touchant notre entreprise, en intégrant responsabilité, transparence et mesures correctives."
+            },
+            {
+                id: "c4",
+                category: "communication",
+                categoryName: "Communication et Influence",
+                subcategory: "Prise de parole, discours et influence externe",
+                text: "Structure une présentation impactante pour expliquer aux actionnaires notre stratégie long terme et les résultats attendus."
+            },
+            {
+                id: "c5",
+                category: "communication",
+                categoryName: "Communication et Influence",
+                subcategory: "Prise de parole, discours et influence externe",
+                text: "Rédige une annonce publique stratégique pour communiquer sur une acquisition majeure et rassurer les investisseurs et les employés."
+            },
+            {
+                id: "c6",
+                category: "communication",
+                categoryName: "Communication et Influence",
+                subcategory: "Prise de parole, discours et influence externe",
+                text: "Crée un communiqué interne expliquant les raisons et bénéfices d'une restructuration d'entreprise pour en assurer l'adhésion et limiter la résistance au changement."
+            },
+            {
+                id: "c7",
+                category: "communication",
+                categoryName: "Communication et Influence",
+                subcategory: "Prise de parole, discours et influence externe",
+                text: "Rédige une tribune d'opinion pour un média influent, illustrant notre vision sur l'avenir de [secteur] et notre rôle dans son évolution."
+            },
+            
+            // Productivité
+            {
+                id: "p1",
+                category: "productivite",
+                categoryName: "Productivité et Gestion du Temps",
+                subcategory: "Maximiser l'efficacité opérationnelle",
+                text: "Optimise mon agenda hebdomadaire en fonction de mes priorités stratégiques et des tâches à plus forte valeur ajoutée."
+            },
+            {
+                id: "p2",
+                category: "productivite",
+                categoryName: "Productivité et Gestion du Temps",
+                subcategory: "Maximiser l'efficacité opérationnelle",
+                text: "Rédige un guide de délégation efficace, avec une matrice des tâches transférables et un processus de suivi clair."
+            },
+            {
+                id: "p3",
+                category: "productivite",
+                categoryName: "Productivité et Gestion du Temps",
+                subcategory: "Maximiser l'efficacité opérationnelle",
+                text: "Crée un modèle d'email standard pour refuser poliment mais fermement les sollicitations non prioritaires."
+            },
+            {
+                id: "p4",
+                category: "productivite",
+                categoryName: "Productivité et Gestion du Temps",
+                subcategory: "Maximiser l'efficacité opérationnelle",
+                text: "Développe une méthodologie rapide de prise de décision, limitant les réunions et favorisant les décisions données-driven."
+            },
+            {
+                id: "p5",
+                category: "productivite",
+                categoryName: "Productivité et Gestion du Temps",
+                subcategory: "Maximiser l'efficacité opérationnelle",
+                text: "Synthétise en 5 points clés les 10 derniers emails urgents reçus et propose des réponses pré-rédigées adaptées à chaque cas."
+            },
+            {
+                id: "p6",
+                category: "productivite",
+                categoryName: "Productivité et Gestion du Temps",
+                subcategory: "Maximiser l'efficacité opérationnelle",
+                text: "Élabore une routine quotidienne optimisée, combinant haute performance, gestion de l'énergie et flexibilité."
+            },
+            {
+                id: "p7",
+                category: "productivite",
+                categoryName: "Productivité et Gestion du Temps",
+                subcategory: "Maximiser l'efficacité opérationnelle",
+                text: "Conçois un tableau de bord personnel pour suivre et ajuster mes priorités sur une base quotidienne et hebdomadaire."
+            },
+            
+            // Innovation
+            {
+                id: "i1",
+                category: "innovation",
+                categoryName: "Innovation et Transformation Digitale",
+                subcategory: "Disruptions et intégration des nouvelles technologies",
+                text: "Identifie les 5 startups les plus prometteuses dans [secteur] et évalue leur potentiel de partenariat ou acquisition."
+            },
+            {
+                id: "i2",
+                category: "innovation",
+                categoryName: "Innovation et Transformation Digitale",
+                subcategory: "Disruptions et intégration des nouvelles technologies",
+                text: "Conçois un plan d'intégration de l'intelligence artificielle pour optimiser notre productivité, relation client et prise de décision."
+            },
+            {
+                id: "i3",
+                category: "innovation",
+                categoryName: "Innovation et Transformation Digitale",
+                subcategory: "Disruptions et intégration des nouvelles technologies",
+                text: "Développe un programme d'innovation interne pour encourager les collaborateurs à proposer et tester de nouvelles idées."
+            },
+            {
+                id: "i4",
+                category: "innovation",
+                categoryName: "Innovation et Transformation Digitale",
+                subcategory: "Disruptions et intégration des nouvelles technologies",
+                text: "Analyse les stratégies des grandes entreprises tech impactant notre marché et propose des réactions adaptées."
+            },
+            {
+                id: "i5",
+                category: "innovation",
+                categoryName: "Innovation et Transformation Digitale",
+                subcategory: "Disruptions et intégration des nouvelles technologies",
+                text: "Crée une roadmap de transformation digitale progressive et priorisée sur 18 mois."
+            },
+            {
+                id: "i6",
+                category: "innovation",
+                categoryName: "Innovation et Transformation Digitale",
+                subcategory: "Disruptions et intégration des nouvelles technologies",
+                text: "Élabore un guide interne sur la blockchain et son application à notre business model."
+            },
+            {
+                id: "i7",
+                category: "innovation",
+                categoryName: "Innovation et Transformation Digitale",
+                subcategory: "Disruptions et intégration des nouvelles technologies",
+                text: "Rédige une analyse sur le passage à un modèle SaaS ou abonnement, avec étude des avantages et risques."
+            },
+            
+            // Finance
+            {
+                id: "f1",
+                category: "finance",
+                categoryName: "Gestion Financière et Performance",
+                subcategory: "Optimisation des ressources et gestion des risques",
+                text: "Identifie les 10% de dépenses où nous pouvons faire des économies sans impacter la performance."
+            },
+            {
+                id: "f2",
+                category: "finance",
+                categoryName: "Gestion Financière et Performance",
+                subcategory: "Optimisation des ressources et gestion des risques",
+                text: "Analyse nos marges bénéficiaires et propose une stratégie d'optimisation sur 12 mois."
+            },
+            {
+                id: "f3",
+                category: "finance",
+                categoryName: "Gestion Financière et Performance",
+                subcategory: "Optimisation des ressources et gestion des risques",
+                text: "Développe un plan de diversification des revenus pour stabiliser notre croissance."
+            },
+            {
+                id: "f4",
+                category: "finance",
+                categoryName: "Gestion Financière et Performance",
+                subcategory: "Optimisation des ressources et gestion des risques",
+                text: "Crée un tableau de bord financier avec les 10 KPI les plus stratégiques pour le suivi en temps réel."
+            },
+            {
+                id: "f5",
+                category: "finance",
+                categoryName: "Gestion Financière et Performance",
+                subcategory: "Optimisation des ressources et gestion des risques",
+                text: "Simule l'impact de fluctuations économiques majeures et propose des stratégies d'anticipation."
+            },
+            {
+                id: "f6",
+                category: "finance",
+                categoryName: "Gestion Financière et Performance",
+                subcategory: "Optimisation des ressources et gestion des risques",
+                text: "Développe une politique de pricing dynamique optimisée pour nos nouveaux marchés."
+            },
+            {
+                id: "f7",
+                category: "finance",
+                categoryName: "Gestion Financière et Performance",
+                subcategory: "Optimisation des ressources et gestion des risques",
+                text: "Évalue les conséquences d'un changement fiscal et propose des ajustements proactifs."
+            },
+            
+            // Prompts Fabric
+            {
+                id: "fab1",
+                category: "fabric",
+                categoryName: "Analyse et Évaluation",
+                subcategory: "Analyse de Contenu",
+                text: "Analyse ce texte et identifie les principaux arguments, les preuves présentées, et évalue la solidité du raisonnement : [TEXTE]"
+            },
+            {
+                id: "fab2",
+                category: "fabric",
+                categoryName: "Analyse et Évaluation",
+                subcategory: "Analyse de Contenu",
+                text: "Examine ce document et identifie les biais potentiels, les lacunes logiques, et les affirmations non étayées : [DOCUMENT]"
+            },
+            {
+                id: "fab3",
+                category: "fabric",
+                categoryName: "Analyse et Évaluation",
+                subcategory: "Analyse Comparative",
+                text: "Compare et contraste ces deux perspectives sur [SUJET]. Identifie les points d'accord, de désaccord, et évalue la force de chaque argument."
+            },
+            {
+                id: "fab4",
+                category: "fabric",
+                categoryName: "Création de Contenu",
+                subcategory: "Rédaction",
+                text: "Rédige un article de blog informatif et engageant sur [SUJET] qui explique les concepts clés de manière accessible pour un public non-expert."
+            },
+            {
+                id: "fab5",
+                category: "fabric",
+                categoryName: "Création de Contenu",
+                subcategory: "Rédaction",
+                text: "Crée un guide étape par étape détaillé sur la façon de [TÂCHE], incluant des conseils pratiques et des erreurs courantes à éviter."
+            },
+            {
+                id: "fab6",
+                category: "fabric",
+                categoryName: "Création de Contenu",
+                subcategory: "Storytelling",
+                text: "Développe une histoire captivante qui illustre l'impact de [CONCEPT/TECHNOLOGIE] sur la vie quotidienne, en mettant l'accent sur les aspects humains et émotionnels."
+            },
+            {
+                id: "fab7",
+                category: "fabric",
+                categoryName: "Visualisation de Données",
+                subcategory: "Interprétation",
+                text: "Décris comment tu visualiserais efficacement ces données pour mettre en évidence les tendances principales et les insights : [DONNÉES]. Explique ton raisonnement pour chaque choix de visualisation."
+            },
+            {
+                id: "fab8",
+                category: "fabric",
+                categoryName: "Visualisation de Données",
+                subcategory: "Conception",
+                text: "Suggère 3 types de visualisations différentes qui seraient appropriées pour communiquer [TYPE DE DONNÉES/INFORMATION] à [PUBLIC CIBLE]. Explique pourquoi chaque visualisation serait efficace."
+            },
+            {
+                id: "fab9",
+                category: "fabric",
+                categoryName: "Explication et Clarification",
+                subcategory: "Vulgarisation",
+                text: "Explique [CONCEPT COMPLEXE] comme si tu le présentais à un enfant de 10 ans, en utilisant des analogies simples et un langage accessible."
+            },
+            {
+                id: "fab10",
+                category: "fabric",
+                categoryName: "Explication et Clarification",
+                subcategory: "Vulgarisation",
+                text: "Décompose [SUJET TECHNIQUE] en ses composantes fondamentales et explique chacune d'elles en termes simples. Utilise des exemples concrets pour illustrer chaque point."
+            },
+            {
+                id: "fab11",
+                category: "fabric",
+                categoryName: "Extraction d'Informations",
+                subcategory: "Résumé",
+                text: "Résume les points clés, les conclusions et les recommandations de ce document en 3-5 puces concises : [DOCUMENT]"
+            },
+            {
+                id: "fab12",
+                category: "fabric",
+                categoryName: "Extraction d'Informations",
+                subcategory: "Résumé",
+                text: "Extrais les 5 insights les plus importants de cet article/rapport et explique pourquoi ils sont significatifs : [ARTICLE/RAPPORT]"
+            },
+            {
+                id: "fab13",
+                category: "fabric",
+                categoryName: "Brainstorming et Idéation",
+                subcategory: "Génération d'Idées",
+                text: "Génère 10 idées créatives et innovantes pour [OBJECTIF/PROBLÈME]. Assure-toi que les idées varient en termes d'approche, de complexité et de ressources requises."
+            },
+            {
+                id: "fab14",
+                category: "fabric",
+                categoryName: "Brainstorming et Idéation",
+                subcategory: "Génération d'Idées",
+                text: "Propose 5 approches non conventionnelles pour résoudre [PROBLÈME] qui pourraient être négligées par les méthodes traditionnelles."
+            },
+            {
+                id: "fab15",
+                category: "fabric",
+                categoryName: "Planification et Stratégie",
+                subcategory: "Planification de Projet",
+                text: "Développe un plan de projet détaillé pour [OBJECTIF], incluant les étapes clés, les délais estimés, les ressources nécessaires et les potentiels obstacles à anticiper."
+            },
+            {
+                id: "fab16",
+                category: "fabric",
+                categoryName: "Planification et Stratégie",
+                subcategory: "Planification de Projet",
+                text: "Crée une feuille de route stratégique pour atteindre [OBJECTIF À LONG TERME] sur les 12 prochains mois, avec des jalons spécifiques et mesurables."
+            },
+            {
+                id: "fab17",
+                category: "fabric",
+                categoryName: "Feedback et Évaluation",
+                subcategory: "Analyse Critique",
+                text: "Évalue ce [PRODUIT/SERVICE/IDÉE] et fournis un feedback constructif sur ses forces, ses faiblesses et ses opportunités d'amélioration."
+            },
+            {
+                id: "fab18",
+                category: "fabric",
+                categoryName: "Feedback et Évaluation",
+                subcategory: "Analyse Critique",
+                text: "Examine cette [PROPOSITION/PLAN] et identifie les risques potentiels, les angles morts et les hypothèses non vérifiées qui pourraient affecter son succès."
+            },
+            {
+                id: "fab19",
+                category: "fabric",
+                categoryName: "Recherche et Analyse",
+                subcategory: "Exploration",
+                text: "Identifie les 5 tendances émergentes les plus significatives dans [INDUSTRIE/DOMAINE] et explique comment elles pourraient façonner l'avenir de ce secteur."
+            },
+            {
+                id: "fab20",
+                category: "fabric",
+                categoryName: "Recherche et Analyse",
+                subcategory: "Exploration",
+                text: "Analyse l'état actuel de [TECHNOLOGIE/PRATIQUE] et prédis comment elle pourrait évoluer au cours des 5 prochaines années, en tenant compte des facteurs technologiques, sociaux et économiques."
+            },
+            {
+                id: "fab21",
+                category: "fabric",
+                categoryName: "Prise de Décision",
+                subcategory: "Analyse Décisionnelle",
+                text: "Je dois décider entre [OPTION A] et [OPTION B]. Aide-moi à analyser cette décision en utilisant un cadre structuré qui considère les avantages, les inconvénients, les risques et les opportunités de chaque option."
+            },
+            {
+                id: "fab22",
+                category: "fabric",
+                categoryName: "Prise de Décision",
+                subcategory: "Analyse Décisionnelle",
+                text: "Évalue ces 3 options pour [DÉCISION] en utilisant les critères suivants : [LISTE DE CRITÈRES]. Recommande l'option la plus appropriée en justifiant ton choix."
+            },
+            {
+                id: "fab23",
+                category: "fabric",
+                categoryName: "Apprentissage et Développement",
+                subcategory: "Plan d'Apprentissage",
+                text: "Crée un plan d'apprentissage structuré pour maîtriser [COMPÉTENCE/SUJET] en partant de zéro. Inclus des ressources recommandées, des étapes progressives et des moyens d'évaluer la progression."
+            },
+            {
+                id: "fab24",
+                category: "fabric",
+                categoryName: "Apprentissage et Développement",
+                subcategory: "Plan d'Apprentissage",
+                text: "Suggère une approche systématique pour améliorer mes compétences en [DOMAINE], avec des exercices pratiques spécifiques, des ressources d'apprentissage et un calendrier réaliste."
+            },
+            {
+                id: "fab25",
+                category: "fabric",
+                categoryName: "Communication",
+                subcategory: "Adaptation au Public",
+                text: "Adapte ce message technique sur [SUJET] pour trois publics différents : des experts du domaine, des décideurs non techniques, et le grand public."
+            },
+            {
+                id: "fab26",
+                category: "fabric",
+                categoryName: "Communication",
+                subcategory: "Adaptation au Public",
+                text: "Reformule cette communication [TEXTE] pour la rendre plus persuasive et engageante, tout en maintenant son exactitude et son intégrité."
+            },
+            {
+                id: "fab27",
+                category: "fabric",
+                categoryName: "Résolution de Problèmes",
+                subcategory: "Analyse de Problème",
+                text: "Analyse ce problème [DESCRIPTION DU PROBLÈME] en profondeur. Identifie ses causes profondes, ses impacts, et propose une approche structurée pour le résoudre."
+            },
+            {
+                id: "fab28",
+                category: "fabric",
+                categoryName: "Résolution de Problèmes",
+                subcategory: "Analyse de Problème",
+                text: "Décompose ce défi complexe [DÉFI] en problèmes plus petits et plus gérables. Pour chaque sous-problème, suggère des approches de résolution spécifiques."
+            },
+            {
+                id: "fab29",
+                category: "fabric",
+                categoryName: "Créativité et Innovation",
+                subcategory: "Pensée Latérale",
+                text: "Propose 7 utilisations non conventionnelles et créatives pour [PRODUIT/TECHNOLOGIE] dans des contextes ou industries où il n'est pas traditionnellement utilisé."
+            },
+            {
+                id: "fab30",
+                category: "fabric",
+                categoryName: "Créativité et Innovation",
+                subcategory: "Pensée Latérale",
+                text: "Imagine comment [CONCEPT/PRODUIT] pourrait évoluer si nous éliminions complètement cette contrainte : [CONTRAINTE]. Décris les nouvelles possibilités qui s'ouvriraient."
+            }
+        ];
+
+        // Afficher les prompts
+        const container = document.getElementById('prompts-container');
+        const html = promptsDatabase.map(prompt => `
+            <div class="prompt-card">
+                <div class="prompt-header">
+                    <div>
+                        <div class="category-name">${prompt.categoryName}</div>
+                        <div class="subcategory">${prompt.subcategory}</div>
+                    </div>
+                    <button class="copy-button" onclick="copyPrompt(this, '${prompt.text.replace(/'/g, "\\'")}')">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+                <p class="prompt-text">${prompt.text}</p>
+            </div>
+        `).join('');
+        
+        container.innerHTML = html;
+    </script>
+</body>
+</html> 

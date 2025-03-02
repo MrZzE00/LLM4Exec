@@ -1,0 +1,235 @@
+<!-- 
+Note: Pour un déploiement en production, il est recommandé d'installer Tailwind CSS 
+comme plugin PostCSS ou d'utiliser Tailwind CLI plutôt que d'utiliser le CDN.
+Voir: https://tailwindcss.com/docs/installation
+-->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formation LLM pour Exécutifs</title>
+    <!-- CDN Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Styles additionnels -->
+    <style>
+        /* Couleurs et ajustements */
+        body {
+            background-color: #0f172a; /* Couleur de fond principale - même que training-llm-exec */
+            color: #fff;
+        }
+        .hero-section {
+            background-color: #1e293b; /* Un fond plus clair que le fond global - même que training-llm-exec */
+        }
+        /* L'icône de la flèche "→" dans le bouton */
+        .cta-button i {
+            margin-left: 0.5rem;
+            transition: transform 0.2s ease;
+        }
+        .cta-button:hover i {
+            transform: translateX(4px); /* léger décalage survol */
+        }
+        /* Zones de cartes (bénéfices) */
+        .benefit-card {
+            background-color: #1e293b; /* Même couleur que les éléments dans training-llm-exec */
+            border-radius: 0.5rem;
+            padding: 1.25rem;
+            text-align: center;
+            transition: background-color 0.2s;
+        }
+        .benefit-card:hover {
+            background-color: #273549; /* Même couleur de survol que dans training-llm-exec */
+        }
+        /* Navigation */
+        .nav-link {
+            color: #94a3b8;
+            transition: color 0.2s;
+            text-decoration: none;
+            padding: 0.5rem;
+        }
+        .nav-link:hover {
+            color: #f8fafc;
+        }
+        .nav-link.active {
+            color: #f8fafc;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="font-sans">
+    <!-- Navigation -->
+    <nav class="bg-[#1e293b] py-4 px-6 flex justify-between items-center">
+        <a href="index.html" class="text-xl font-bold text-white">Formation LLM</a>
+        <div class="flex space-x-4">
+            <a href="index.html" class="nav-link active">Accueil</a>
+            <a href="training-llm-exec.html" class="nav-link">Programme</a>
+        </div>
+    </nav>
+
+    <!-- Section Héro -->
+    <section class="hero-section text-center text-white py-16 px-4">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">Formation LLM pour Exécutifs</h1>
+        <p class="text-gray-300 max-w-xl mx-auto mb-8">
+            Maîtrisez les modèles de langage et transformez votre organisation grâce à l'IA générative
+        </p>
+        <a href="training-llm-exec.html" class="cta-button inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-full">
+            Accéder à la formation
+            <i class="fas fa-arrow-right"></i>
+        </a>
+    </section>
+
+    <!-- Section : Pourquoi cette formation ? -->
+    <section class="py-12 px-4 bg-[#0f172a] text-white">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-8">Pourquoi cette formation ?</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <!-- Carte 1 -->
+                <div class="benefit-card">
+                    <div class="text-3xl mb-2">
+                        ⚡
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Vision stratégique</h3>
+                    <p class="text-gray-300 text-sm">
+                        Développez une compréhension claire des opportunités stratégiques offertes par les LLM pour votre organisation.
+                    </p>
+                </div>
+                
+                <!-- Carte 2 -->
+                <div class="benefit-card">
+                    <div class="text-3xl mb-2">
+                        🧠
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Prise de décision éclairée</h3>
+                    <p class="text-gray-300 text-sm">
+                        Évaluez les implications des LLM sans vous perdre dans les détails techniques complexes.
+                    </p>
+                </div>
+                
+                <!-- Carte 3 -->
+                <div class="benefit-card">
+                    <div class="text-3xl mb-2">
+                        🚀
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Avantage concurrentiel</h3>
+                    <p class="text-gray-300 text-sm">
+                        Positionnez votre entreprise à l'avant-garde de la révolution de l'IA générative.
+                    </p>
+                </div>
+                
+                <!-- Carte 4 -->
+                <div class="benefit-card">
+                    <div class="text-3xl mb-2">
+                        📈
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">ROI mesurable</h3>
+                    <p class="text-gray-300 text-sm">
+                        Identifiez les opportunités d'implémentation à fort impact et à faible risque pour votre organisation.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Témoignage -->
+    <section class="py-12 px-4 bg-[#0f172a] text-white">
+        <div class="max-w-3xl mx-auto bg-[#1e293b] rounded-lg p-6 text-center">
+            <div class="text-4xl mb-4 text-blue-400">
+                «
+            </div>
+            <p class="text-gray-200 italic mb-6">
+                Cette formation m'a permis de comprendre rapidement les enjeux stratégiques des LLM sans me perdre dans la complexité technique. 
+                J'ai pu immédiatement identifier plusieurs opportunités d'implémentation qui ont transformé nos processus décisionnels.
+            </p>
+            <div class="flex justify-center items-center">
+                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center mr-3">
+                    <span class="text-white text-sm">P</span>
+                </div>
+                <div class="text-left">
+                    <p class="font-semibold">Philippe Durand</p>
+                    <p class="text-sm text-gray-400">Directeur Général, Groupe Innovation</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section : Ce que vous allez apprendre -->
+    <section class="py-12 px-4 bg-[#0f172a] text-white">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-8">Ce que vous allez apprendre</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <!-- Feature 1 -->
+                <div class="benefit-card">
+                    <div class="text-3xl mb-2">🔍</div>
+                    <h3 class="font-semibold text-lg mb-2">Fondamentaux des LLM</h3>
+                    <p class="text-gray-300 text-sm">
+                        Comprendre ce que sont les modèles de langage et pourquoi ils représentent une avancée majeure dans l'IA.
+                    </p>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="benefit-card">
+                    <div class="text-3xl mb-2">💼</div>
+                    <h3 class="font-semibold text-lg mb-2">Applications pratiques</h3>
+                    <p class="text-gray-300 text-sm">
+                        Découvrir les cas d'usage concrets des LLM dans différents secteurs d'activité et fonctions.
+                    </p>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="benefit-card">
+                    <div class="text-3xl mb-2">⚖️</div>
+                    <h3 class="font-semibold text-lg mb-2">Risques et opportunités</h3>
+                    <p class="text-gray-300 text-sm">
+                        Évaluer les implications éthiques, légales et organisationnelles de l'adoption des LLM.
+                    </p>
+                </div>
+                
+                <!-- Feature 4 -->
+                <div class="benefit-card">
+                    <div class="text-3xl mb-2">🗺️</div>
+                    <h3 class="font-semibold text-lg mb-2">Stratégie d'implémentation</h3>
+                    <p class="text-gray-300 text-sm">
+                        Élaborer une feuille de route pour intégrer efficacement les LLM dans votre organisation.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Section CTA final -->
+    <section class="py-12 px-4 bg-[#0f172a] text-white">
+        <div class="max-w-2xl mx-auto text-center">
+            <h2 class="text-3xl font-bold mb-4">Prêt à transformer votre organisation ?</h2>
+            <p class="text-gray-300 mb-6">
+                Rejoignez les dirigeants visionnaires qui ont déjà adopté les LLM comme levier stratégique
+            </p>
+            <a href="training-llm-exec.html" class="cta-button bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-full inline-flex items-center">
+                Commencer la formation
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 px-4 bg-[#1e293b] text-center text-gray-400 text-sm">
+        <div class="max-w-4xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+                <div class="mb-4 md:mb-0">
+                    <a href="index.html" class="text-xl font-bold text-white">Formation LLM</a>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="index.html" class="text-gray-400 hover:text-white">Accueil</a>
+                    <a href="training-llm-exec.html" class="text-gray-400 hover:text-white">Programme</a>
+                    <a href="#" class="text-gray-400 hover:text-white">Contact</a>
+                </div>
+            </div>
+            <p>&copy; 2023 Formation LLM pour Exécutifs. Tous droits réservés.</p>
+        </div>
+    </footer>
+</body>
+</html> 

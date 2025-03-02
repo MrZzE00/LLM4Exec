@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formation LLM pour Exécutifs - Programme</title>
+    <link rel="stylesheet" href="assets/css/training.css">
+    <link rel="stylesheet" href="assets/css/prompt-library.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <button class="burger-menu" onclick="window.trainingManager.toggleFullscreen(false)">
+        <i class="fas fa-bars"></i>
+        <span>Menu</span>
+    </button>
+
+    <!-- Nouveau bouton stats -->
+    <button class="stats-button" onclick="window.trainingManager.toggleStats()">
+        <i class="fas fa-user-circle"></i>
+    </button>
+
+    <!-- Panneau de statistiques -->
+    <div class="stats-panel">
+        <div class="stats-header">
+            <h3>Votre progression</h3>
+            <button class="close-stats">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="stats-content">
+            <!-- Les stats seront générées par JavaScript -->
+        </div>
+    </div>
+
+    <div class="training-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1>Formation LLM</h1>
+                <a href="index.html" class="home-link">
+                    <i class="fas fa-home"></i>
+                    Accueil
+                </a>
+            </div>
+            
+            <div id="modules-list">
+                <!-- Les modules seront générés par JavaScript -->
+            </div>
+
+            <!-- Modifier le lien pour pointer vers la nouvelle page -->
+            <div class="library-link">
+                <a href="prompt-library.html" class="menu-item">
+                    <i class="fas fa-book"></i>
+                    <span>Bibliothèque de Prompts</span>
+                </a>
+            </div>
+        </aside>
+
+        <main class="content-area">
+            <div id="content-frame">
+                <div class="welcome-screen">
+                    <h2>Bienvenue dans votre formation</h2>
+                    <p>Sélectionnez un module dans le menu pour commencer.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="assets/js/prompts-database.js"></script>
+    <script src="assets/js/prompt-library.js"></script>
+    <script src="assets/js/training.js"></script>
+</body>
+</html> 
