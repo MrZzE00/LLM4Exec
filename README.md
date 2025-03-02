@@ -1,7 +1,3 @@
-Bien sûr, pour améliorer le fichier README de votre projet **LLM4Exec - Formation LLM pour Exécutifs**, voici une version enrichie et optimisée pour le SEO, visant à accroître l'attractivité et la visibilité de votre projet.
-
----
-
 # LLM4Exec - Formation LLM pour Exécutifs
 
 ## Table des matières
