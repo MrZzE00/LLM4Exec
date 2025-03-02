@@ -3,13 +3,231 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formation LLM - Plateforme d'Apprentissage</title>
-    <meta name="description" content="Plateforme de formation aux modèles de langage (LLM) avec modules interactifs et bibliothèque de prompts">
+    <title>Formation LLM - Cursor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/main.css">
-    <link rel="icon" href="assets/images/logo.svg" type="image/svg+xml">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .app-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Burger Menu Styles - Updated */
+        .burger-menu {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 50;
+            width: 40px;
+            height: 40px;
+            background-color: #1f2937;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .burger-menu:hover {
+            background-color: #374151;
+        }
+        
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -320px;
+            width: 320px;
+            height: 100%;
+            background-color: #111827;
+            border-right: 1px solid #374151;
+            overflow-y: auto;
+            z-index: 40;
+            transition: left 0.3s ease-in-out;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        .sidebar.open {
+            left: 0;
+        }
+        
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background-color: #0f172a;
+            border-bottom: 1px solid #374151;
+        }
+        
+        .sidebar-title {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .close-menu {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #1f2937;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .close-menu:hover {
+            background-color: #374151;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 30;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+        
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Main content positioning */
+        .main-content {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: margin-left 0.3s ease;
+            padding-left: 4rem; /* Add padding to prevent title from being covered */
+        }
+        
+        /* When sidebar is open, move burger menu */
+        .sidebar.open ~ .burger-menu {
+            left: 330px; /* Position to the right of the sidebar */
+        }
+        
+        #contentContainer {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        #content {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .module-title {
+            padding: 0.75rem 1rem;
+            background-color: #1f2937;
+            font-weight: 600;
+            border-bottom: 1px solid #374151;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .module-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .module-content.open {
+            max-height: 500px;
+        }
+        
+        .sub-item {
+            padding: 0.5rem 1rem 0.5rem 1.5rem;
+            transition: all 0.2s;
+            border-bottom: 1px solid #1f2937;
+            font-size: 0.85rem;
+            background-color: #0f172a;
+        }
+        
+        .sub-item:hover {
+            background-color: #374151;
+        }
+        
+        #content {
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        
+        #content.loaded {
+            opacity: 1;
+        }
+        
+        .loader {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid #ffffff;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .iframe-container {
+            position: relative;
+            flex: 1;
+            overflow: hidden;
+            width: 100%;
+            border-radius: 0.5rem;
+            background-color: #111827;
+        }
+        
+        .responsive-iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
 </head>
-<body>
+<body class="bg-black text-white font-sans">
+    
+    <!-- Burger Menu Button -->
+    <div class="burger-menu" id="burgerMenu">
+        <i class="fas fa-bars text-white"></i>
+    </div>
+    
     <!-- Overlay -->
     <div class="overlay" id="overlay"></div>
     
@@ -18,82 +236,1039 @@
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div class="sidebar-title">Formation LLM</div>
-                <button class="close-menu" id="closeMenu" aria-label="Fermer le menu">
-                    <i class="fas fa-times"></i>
-                </button>
+                <div class="close-menu" id="closeMenu">
+                    <i class="fas fa-times text-white"></i>
+                </div>
             </div>
             
-            <div class="sidebar-content" id="sidebarContent">
-                <!-- Le contenu du menu sera injecté ici par JavaScript -->
+            <!-- Module 1 -->
+            <div class="module-wrapper">
+                <div class="module-title" data-module="module1">
+                    Module 1: Comprendre les LLM
+                    <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+                </div>
+                <div class="module-content" id="module1">
+                    <div class="sub-item">
+                        <a href="#" class="block w-full text-gray-300 hover:text-white" 
+                           data-url="https://comprendre-llm-xmumju1.gamma.site">
+                            1.1 Les LLM expliqués simplement
+                        </a>
+                    </div>
+                    <div class="sub-item">
+                        <a href="#" class="block w-full text-gray-300 hover:text-white" 
+                           data-url="https://amplifiez-votre-expertis-nj550ee.gamma.site/">
+                            1.2 Potentiel de transformation
+                        </a>
+                    </div>
+                    <div class="sub-item">
+                        <a href="#" class="block w-full text-gray-300 hover:text-white" 
+                           data-url="https://cas-dusage-llm-nxvjk07.gamma.site/">
+                            1.3 Les cas d'usage à fort impact
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Module 2 -->
+            <div class="module-wrapper">
+                <div class="module-title" data-module="module2">
+                    Module 2: Dialoguer avec les LLM
+                    <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+                </div>
+                <div class="module-content" id="module2">
+                    <div class="sub-item">
+                        <a href="#" class="block w-full text-gray-300 hover:text-white" 
+                           data-url="https://dialoguer-avec-les-llm-nhbm0p6.gamma.site/">
+                            2.1 Formuler des instructions claires
+                        </a>
+                    </div>
+                    <div class="sub-item">
+                        <a href="#" class="block w-full text-gray-300 hover:text-white" 
+                           data-url="https://techniques-ia-w2k0pbh.gamma.site/">
+                            2.2 Techniques avancées
+                        </a>
+                    </div>
+                    <div class="sub-item">
+                        <a href="#" class="block w-full text-gray-300 hover:text-white" 
+                           data-url="https://exercices-pratiques-ugero89.gamma.site/">
+                            2.3 Exercices pratiques
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Module 3 -->
+            <div class="module-wrapper">
+                <div class="module-title" data-module="module3">
+                    Module 3: Applications métier
+                    <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+                </div>
+                <div class="module-content" id="module3">
+                    <div class="sub-item">
+                        <a href="#" class="block w-full text-gray-300 hover:text-white" 
+                           data-url="https://applications-metier-impa-fl3p4qo.gamma.site/">
+                            3.1 Rédaction et communication
+                        </a>
+                    </div>
+                    <div class="sub-item">
+                        <a href="#" class="block w-full text-gray-300 hover:text-white" 
+                           data-url="https://analyse-info-tnlxyga.gamma.site/">
+                            3.2 Analyse et traitement de l'information
+                        </a>
+                    </div>
+                    <div class="sub-item">
+                        <a href="#" class="block w-full text-gray-300 hover:text-white" 
+                           data-url="https://creativite-innovation-dcah0cn.gamma.site/">
+                            3.3 Créativité et résolution de problèmes
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Module 4 -->
+            <div class="module-wrapper">
+                <div class="module-title" data-module="module4">
+                    Module 4: Intégrer les LLM dans votre routine
+                    <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+                </div>
+                <div class="module-content" id="module4">
+                    <div class="sub-item">
+                        <a href="#" class="block w-full text-gray-300 hover:text-white" 
+                           data-url="https://optimisation-taches-llm-mxryz9t.gamma.site/">
+                            4.1 Identifier les tâches à fort potentiel
+                        </a>
+                    </div>
+                    <div class="sub-item">
+                        <a href="#" class="block w-full text-gray-300 hover:text-white" 
+                           data-url="https://bibliotheque-de-super-pr-ngier1d.gamma.site/">
+                            4.2 Construire vos propres modèles de prompts
+                        </a>
+                    </div>
+                    <div class="sub-item">
+                        <a href="#" class="block w-full text-gray-300 hover:text-white" 
+                           data-url="https://mesurer-gains-llm-oi8yxbi.gamma.site/">
+                            4.3 Mesurer les gains concrets
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Module 5 -->
+            <div class="module-wrapper">
+                <div class="module-title" data-module="module5">
+                    Module 5: Plan d'action personnalisé
+                    <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+                </div>
+                <div class="module-content" id="module5">
+                    <div class="sub-item">
+                        <a href="#" class="block w-full text-gray-300 hover:text-white" 
+                           data-url="https://adoption-llm-30-jours-a1x2pos.gamma.site/">
+                            5.1 Votre feuille de route sur 30 jours
+                        </a>
+                    </div>
+                    <div class="sub-item">
+                        <a href="#" class="block w-full text-gray-300 hover:text-white" 
+                           data-url="https://bibliotheque-prompts-sj9tf7j.gamma.site/">
+                            5.2 Bibliothèque de prompts prêts à l'emploi
+                        </a>
+                    </div>
+                    <div class="sub-item">
+                        <a href="#" class="block w-full text-gray-300 hover:text-white" 
+                           data-url="https://maitriser-ia-y7ie7bo.gamma.site/">
+                            5.3 Ressources pour développer vos compétences
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Module 6 -->
+            <div class="module-wrapper">
+                <div class="module-title" data-module="modulePrompts">
+                    Bibliothèque de Prompts
+                    <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+                </div>
+                <div class="module-content" id="modulePrompts">
+                    <div class="sub-item">
+                        <a href="#" class="block w-full text-gray-300 hover:text-white" 
+                           data-url="prompt-library">
+                            Accéder à la bibliothèque
+                        </a>
+                    </div>
+                </div>
             </div>
         </aside>
 
         <!-- Main content area -->
-        <main class="main-content">
-            <!-- Burger Menu Button déplacé à l'intérieur de main-content -->
-            <button class="burger-menu" id="burgerMenu" aria-label="Menu">
-                <i class="fas fa-bars"></i>
-            </button>
-            
-            <!-- Bouton bibliothèque -->
-            <button class="library-button" id="libraryButton" aria-label="Bibliothèque de prompts">
-                <i class="fas fa-book"></i>
-            </button>
-            
-            <div id="contentContainer" class="content-container">
-                <h1 class="page-title">Formation LLM</h1>
-                <p class="page-description">Sélectionnez un module dans le menu pour commencer votre apprentissage.</p>
+        <main class="main-content p-6">
+            <div id="contentContainer" class="bg-gray-900 p-6 rounded-lg h-full">
+                <h1 class="text-4xl font-bold mb-4">Formation LLM</h1>
+                <p class="text-gray-400 mb-4">Sélectionnez un module dans le menu pour commencer votre apprentissage.</p>
                 
-                <div id="content" class="content">
-                    <div class="welcome-screen">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="welcome-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div id="content" class="flex-1 flex items-center justify-center">
+                    <div class="text-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 mx-auto text-gray-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                         </svg>
-                        <p class="welcome-text">Choisissez un cours dans le menu pour commencer</p>
+                        <p class="text-xl text-gray-400">Choisissez un cours dans le menu pour commencer</p>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Templates -->
-    <template id="prompt-library-template">
+    <script id="prompt-library-template" type="text/template">
         <div class="prompt-library">
-            <div class="prompt-library-header">
-                <h2 class="prompt-library-title">Bibliothèque de Prompts</h2>
-                <p class="prompt-library-description">Une collection de prompts professionnels prêts à l'emploi pour optimiser votre travail.</p>
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold mb-4">Bibliothèque de Prompts</h2>
+                <p class="text-gray-400 mb-6">Une collection de prompts professionnels prêts à l'emploi pour optimiser votre travail.</p>
                 
                 <!-- Barre de recherche -->
-                <div class="search-container">
+                <div class="relative mb-6">
                     <input type="text" id="prompt-search" placeholder="Rechercher un prompt..." 
-                           class="search-input">
-                    <button id="search-button" class="search-button">
+                           class="w-full bg-gray-800 text-white px-4 py-2 rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <button id="search-button" class="absolute right-2 top-2 text-gray-400">
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
                 
                 <!-- Filtres par catégorie -->
-                <div class="filter-container">
-                    <h3 class="filter-title">Filtrer par catégorie</h3>
-                    <div class="filter-buttons" id="categoryFilters">
-                        <!-- Les filtres seront injectés ici par JavaScript -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold mb-2">Filtrer par catégorie</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="category-filter active px-3 py-1 rounded-full bg-blue-600 text-white text-sm" data-category="all">
+                            Tous
+                        </button>
+                        <button class="category-filter px-3 py-1 rounded-full bg-gray-700 text-white text-sm" data-category="strategie">
+                            Stratégie
+                        </button>
+                        <button class="category-filter px-3 py-1 rounded-full bg-gray-700 text-white text-sm" data-category="leadership">
+                            Leadership
+                        </button>
+                        <button class="category-filter px-3 py-1 rounded-full bg-gray-700 text-white text-sm" data-category="communication">
+                            Communication
+                        </button>
+                        <button class="category-filter px-3 py-1 rounded-full bg-gray-700 text-white text-sm" data-category="productivite">
+                            Productivité
+                        </button>
+                        <button class="category-filter px-3 py-1 rounded-full bg-gray-700 text-white text-sm" data-category="innovation">
+                            Innovation
+                        </button>
+                        <button class="category-filter px-3 py-1 rounded-full bg-gray-700 text-white text-sm" data-category="finance">
+                            Finance
+                        </button>
+                        <button class="category-filter px-3 py-1 rounded-full bg-gray-700 text-white text-sm" data-category="fabric">
+                            Fabric
+                        </button>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Liste des prompts -->
-            <div id="prompts-container" class="prompts-grid">
-                <!-- Les prompts seront injectés ici par JavaScript -->
+                
+                <!-- Liste des prompts -->
+                <div id="prompts-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[60vh] overflow-y-auto pr-2">
+                    <!-- Les prompts seront injectés ici par JavaScript -->
+                </div>
             </div>
         </div>
-    </template>
+    </script>
 
-    <!-- Scripts -->
-    <script src="assets/js/data/modules.js"></script>
-    <script src="assets/js/data/prompts.js"></script>
-    <script src="assets/js/modules/sidebar.js"></script>
-    <script src="assets/js/modules/content-loader.js"></script>
-    <script src="assets/js/modules/prompt-library.js"></script>
-    <script src="assets/js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const content = document.getElementById('content');
+            const instructionText = document.querySelector('#contentContainer p.text-gray-400');
+            const burgerMenu = document.getElementById('burgerMenu');
+            const closeMenu = document.getElementById('closeMenu');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            const moduleTitles = document.querySelectorAll('.module-title');
+            
+            // Toggle sidebar
+            burgerMenu.addEventListener('click', function() {
+                sidebar.classList.add('open');
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                
+                // Move burger menu to the right when sidebar is open
+                burgerMenu.style.left = '330px';
+            });
+            
+            // Close sidebar
+            function closeSidebar() {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+                
+                // Reset burger menu position
+                burgerMenu.style.left = '1rem';
+            }
+            
+            closeMenu.addEventListener('click', closeSidebar);
+            overlay.addEventListener('click', closeSidebar);
+            
+            // Toggle module content
+            moduleTitles.forEach(title => {
+                title.addEventListener('click', function() {
+                    const moduleId = this.getAttribute('data-module');
+                    const moduleContent = document.getElementById(moduleId);
+                    
+                    // Close all other modules
+                    document.querySelectorAll('.module-content').forEach(content => {
+                        if (content.id !== moduleId) {
+                            content.classList.remove('open');
+                            const icon = content.previousElementSibling.querySelector('i');
+                            icon.classList.remove('fa-chevron-up');
+                            icon.classList.add('fa-chevron-down');
+                        }
+                    });
+                    
+                    // Toggle current module
+                    moduleContent.classList.toggle('open');
+                    const icon = this.querySelector('i');
+                    if (moduleContent.classList.contains('open')) {
+                        icon.classList.remove('fa-chevron-down');
+                        icon.classList.add('fa-chevron-up');
+                    } else {
+                        icon.classList.remove('fa-chevron-up');
+                        icon.classList.add('fa-chevron-down');
+                    }
+                });
+            });
+            
+            // Handle course selection
+            const courseLinks = document.querySelectorAll('[data-url]');
+            courseLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const url = this.getAttribute('data-url');
+                    const title = this.textContent.trim();
+                    
+                    // Update page title
+                    document.querySelector('#contentContainer h1').textContent = title;
+                    
+                    // Hide instruction text
+                    instructionText.style.display = 'none';
+                    
+                    // Show loading state
+                    content.classList.remove('loaded');
+                    content.innerHTML = '<div class="loader"></div>';
+                    
+                    // Close sidebar
+                    closeSidebar();
+                    
+                    // Check if it's the prompt library
+                    if (url === 'prompt-library') {
+                        setTimeout(() => {
+                            content.innerHTML = document.getElementById('prompt-library-template').innerHTML;
+                            
+                            // Initialize the prompt library
+                            loadPromptLibrary();
+                            
+                            // Show content with animation
+                            setTimeout(() => {
+                                content.classList.add('loaded');
+                            }, 100);
+                        }, 500);
+                    } else {
+                        // Load content in iframe after a short delay
+                        setTimeout(() => {
+                            content.innerHTML = `
+                                <div class="iframe-container">
+                                    <iframe class="responsive-iframe" src="${url}" title="${title}" allowfullscreen></iframe>
+                                </div>
+                            `;
+                            
+                            // Show content with animation
+                            setTimeout(() => {
+                                content.classList.add('loaded');
+                            }, 100);
+                        }, 500);
+                    }
+                });
+            });
+        });
+        
+        function loadPromptLibrary() {
+            // Base de données des prompts
+            const promptsDatabase = [
+                // Stratégie
+                {
+                    id: "s1",
+                    category: "strategie",
+                    categoryName: "Prise de Décision Stratégique",
+                    subcategory: "Analyse de marché et tendances",
+                    text: "Identifie les trois transformations économiques, technologiques et sociétales les plus influentes sur le marché [secteur] d'ici 5 ans. Propose des scénarios d'adaptation et les ressources nécessaires pour chaque stratégie."
+                },
+                {
+                    id: "s2",
+                    category: "strategie",
+                    categoryName: "Prise de Décision Stratégique",
+                    subcategory: "Analyse de marché et tendances",
+                    text: "Compare les stratégies de croissance de [3 concurrents] sur les cinq dernières années. Dégage les tendances clés, les erreurs à éviter et les opportunités sous-exploitées dans notre secteur."
+                },
+                {
+                    id: "s3",
+                    category: "strategie",
+                    categoryName: "Prise de Décision Stratégique",
+                    subcategory: "Analyse de marché et tendances",
+                    text: "Rédige une analyse comparative des dernières innovations disruptives en [secteur] et leur impact sur notre chaîne de valeur, expérience client et compétitivité."
+                },
+                {
+                    id: "s4",
+                    category: "strategie",
+                    categoryName: "Prise de Décision Stratégique",
+                    subcategory: "Analyse de marché et tendances",
+                    text: "Évalue les évolutions comportementales des consommateurs dans [secteur] et propose trois nouvelles offres alignées sur ces attentes émergentes."
+                },
+                {
+                    id: "s5",
+                    category: "strategie",
+                    categoryName: "Prise de Décision Stratégique",
+                    subcategory: "Analyse de marché et tendances",
+                    text: "Identifie les marchés émergents les plus attractifs pour une expansion internationale, en évaluant les facteurs de risque, les coûts d'entrée et les avantages concurrentiels potentiels."
+                },
+                {
+                    id: "s6",
+                    category: "strategie",
+                    categoryName: "Prise de Décision Stratégique",
+                    subcategory: "Analyse de marché et tendances",
+                    text: "Simule un scénario de crise majeure affectant notre secteur (ex. rupture d'approvisionnement, nouvelle réglementation). Développe un plan de contingence détaillé avec actions préventives et mesures correctives."
+                },
+                {
+                    id: "s7",
+                    category: "strategie",
+                    categoryName: "Prise de Décision Stratégique",
+                    subcategory: "Analyse de marché et tendances",
+                    text: "Évalue l'impact des nouvelles régulations sur notre modèle d'affaires. Propose des stratégies de conformité proactives tout en conservant un avantage concurrentiel."
+                },
+                
+                // Leadership
+                {
+                    id: "l1",
+                    category: "leadership",
+                    categoryName: "Leadership et Gestion d'Équipe",
+                    subcategory: "Mobilisation, cohésion et transformation",
+                    text: "Crée un message puissant destiné aux équipes après une année difficile, en insistant sur la résilience, les apprentissages et la vision d'avenir."
+                },
+                {
+                    id: "l2",
+                    category: "leadership",
+                    categoryName: "Leadership et Gestion d'Équipe",
+                    subcategory: "Mobilisation, cohésion et transformation",
+                    text: "Structure un discours d'alignement stratégique pour une réunion trimestrielle, en mettant en avant les priorités clés, les succès récents et les défis à venir."
+                },
+                {
+                    id: "l3",
+                    category: "leadership",
+                    categoryName: "Leadership et Gestion d'Équipe",
+                    subcategory: "Mobilisation, cohésion et transformation",
+                    text: "Rédige une annonce engageante pour mobiliser les équipes autour d'un grand projet de transformation, en insistant sur les bénéfices individuels et collectifs."
+                },
+                {
+                    id: "l4",
+                    category: "leadership",
+                    categoryName: "Leadership et Gestion d'Équipe",
+                    subcategory: "Mobilisation, cohésion et transformation",
+                    text: "Crée une intervention destinée à remobiliser une équipe en perte de motivation. Identifie les freins existants et propose des leviers d'engagement concrets."
+                },
+                {
+                    id: "l5",
+                    category: "leadership",
+                    categoryName: "Leadership et Gestion d'Équipe",
+                    subcategory: "Mobilisation, cohésion et transformation",
+                    text: "Développe une feuille de route opérationnelle pour que les managers intermédiaires déclinent notre vision stratégique en actions terrain."
+                },
+                {
+                    id: "l6",
+                    category: "leadership",
+                    categoryName: "Leadership et Gestion d'Équipe",
+                    subcategory: "Mobilisation, cohésion et transformation",
+                    text: "Élabore un plan de communication interne pour accompagner la transition vers une nouvelle culture d'entreprise et en assurer l'adoption durable."
+                },
+                {
+                    id: "l7",
+                    category: "leadership",
+                    categoryName: "Leadership et Gestion d'Équipe",
+                    subcategory: "Mobilisation, cohésion et transformation",
+                    text: "Conçois un programme de mentorat interne pour accélérer la montée en compétences des talents à fort potentiel et renforcer la rétention des leaders de demain."
+                },
+                
+                // Communication
+                {
+                    id: "c1",
+                    category: "communication",
+                    categoryName: "Communication et Influence",
+                    subcategory: "Prise de parole, discours et influence externe",
+                    text: "Rédige un discours percutant pour un événement corporate mettant en avant notre engagement en matière d'innovation, d'éthique et de transformation digitale."
+                },
+                {
+                    id: "c2",
+                    category: "communication",
+                    categoryName: "Communication et Influence",
+                    subcategory: "Prise de parole, discours et influence externe",
+                    text: "Prépare un argumentaire convaincant pour attirer un investisseur stratégique, en mettant en avant les indicateurs de croissance, les avantages concurrentiels et la roadmap future."
+                },
+                {
+                    id: "c3",
+                    category: "communication",
+                    categoryName: "Communication et Influence",
+                    subcategory: "Prise de parole, discours et influence externe",
+                    text: "Conçois une réponse officielle de gestion de crise pour une polémique médiatique touchant notre entreprise, en intégrant responsabilité, transparence et mesures correctives."
+                },
+                {
+                    id: "c4",
+                    category: "communication",
+                    categoryName: "Communication et Influence",
+                    subcategory: "Prise de parole, discours et influence externe",
+                    text: "Structure une présentation impactante pour expliquer aux actionnaires notre stratégie long terme et les résultats attendus."
+                },
+                {
+                    id: "c5",
+                    category: "communication",
+                    categoryName: "Communication et Influence",
+                    subcategory: "Prise de parole, discours et influence externe",
+                    text: "Rédige une annonce publique stratégique pour communiquer sur une acquisition majeure et rassurer les investisseurs et les employés."
+                },
+                {
+                    id: "c6",
+                    category: "communication",
+                    categoryName: "Communication et Influence",
+                    subcategory: "Prise de parole, discours et influence externe",
+                    text: "Crée un communiqué interne expliquant les raisons et bénéfices d'une restructuration d'entreprise pour en assurer l'adhésion et limiter la résistance au changement."
+                },
+                {
+                    id: "c7",
+                    category: "communication",
+                    categoryName: "Communication et Influence",
+                    subcategory: "Prise de parole, discours et influence externe",
+                    text: "Rédige une tribune d'opinion pour un média influent, illustrant notre vision sur l'avenir de [secteur] et notre rôle dans son évolution."
+                },
+                
+                // Productivité
+                {
+                    id: "p1",
+                    category: "productivite",
+                    categoryName: "Productivité et Gestion du Temps",
+                    subcategory: "Maximiser l'efficacité opérationnelle",
+                    text: "Optimise mon agenda hebdomadaire en fonction de mes priorités stratégiques et des tâches à plus forte valeur ajoutée."
+                },
+                {
+                    id: "p2",
+                    category: "productivite",
+                    categoryName: "Productivité et Gestion du Temps",
+                    subcategory: "Maximiser l'efficacité opérationnelle",
+                    text: "Rédige un guide de délégation efficace, avec une matrice des tâches transférables et un processus de suivi clair."
+                },
+                {
+                    id: "p3",
+                    category: "productivite",
+                    categoryName: "Productivité et Gestion du Temps",
+                    subcategory: "Maximiser l'efficacité opérationnelle",
+                    text: "Crée un modèle d'email standard pour refuser poliment mais fermement les sollicitations non prioritaires."
+                },
+                {
+                    id: "p4",
+                    category: "productivite",
+                    categoryName: "Productivité et Gestion du Temps",
+                    subcategory: "Maximiser l'efficacité opérationnelle",
+                    text: "Développe une méthodologie rapide de prise de décision, limitant les réunions et favorisant les décisions données-driven."
+                },
+                {
+                    id: "p5",
+                    category: "productivite",
+                    categoryName: "Productivité et Gestion du Temps",
+                    subcategory: "Maximiser l'efficacité opérationnelle",
+                    text: "Synthétise en 5 points clés les 10 derniers emails urgents reçus et propose des réponses pré-rédigées adaptées à chaque cas."
+                },
+                {
+                    id: "p6",
+                    category: "productivite",
+                    categoryName: "Productivité et Gestion du Temps",
+                    subcategory: "Maximiser l'efficacité opérationnelle",
+                    text: "Élabore une routine quotidienne optimisée, combinant haute performance, gestion de l'énergie et flexibilité."
+                },
+                {
+                    id: "p7",
+                    category: "productivite",
+                    categoryName: "Productivité et Gestion du Temps",
+                    subcategory: "Maximiser l'efficacité opérationnelle",
+                    text: "Conçois un tableau de bord personnel pour suivre et ajuster mes priorités sur une base quotidienne et hebdomadaire."
+                },
+                
+                // Innovation
+                {
+                    id: "i1",
+                    category: "innovation",
+                    categoryName: "Innovation et Transformation Digitale",
+                    subcategory: "Disruptions et intégration des nouvelles technologies",
+                    text: "Identifie les 5 startups les plus prometteuses dans [secteur] et évalue leur potentiel de partenariat ou acquisition."
+                },
+                {
+                    id: "i2",
+                    category: "innovation",
+                    categoryName: "Innovation et Transformation Digitale",
+                    subcategory: "Disruptions et intégration des nouvelles technologies",
+                    text: "Conçois un plan d'intégration de l'intelligence artificielle pour optimiser notre productivité, relation client et prise de décision."
+                },
+                {
+                    id: "i3",
+                    category: "innovation",
+                    categoryName: "Innovation et Transformation Digitale",
+                    subcategory: "Disruptions et intégration des nouvelles technologies",
+                    text: "Développe un programme d'innovation interne pour encourager les collaborateurs à proposer et tester de nouvelles idées."
+                },
+                {
+                    id: "i4",
+                    category: "innovation",
+                    categoryName: "Innovation et Transformation Digitale",
+                    subcategory: "Disruptions et intégration des nouvelles technologies",
+                    text: "Analyse les stratégies des grandes entreprises tech impactant notre marché et propose des réactions adaptées."
+                },
+                {
+                    id: "i5",
+                    category: "innovation",
+                    categoryName: "Innovation et Transformation Digitale",
+                    subcategory: "Disruptions et intégration des nouvelles technologies",
+                    text: "Crée une roadmap de transformation digitale progressive et priorisée sur 18 mois."
+                },
+                {
+                    id: "i6",
+                    category: "innovation",
+                    categoryName: "Innovation et Transformation Digitale",
+                    subcategory: "Disruptions et intégration des nouvelles technologies",
+                    text: "Élabore un guide interne sur la blockchain et son application à notre business model."
+                },
+                {
+                    id: "i7",
+                    category: "innovation",
+                    categoryName: "Innovation et Transformation Digitale",
+                    subcategory: "Disruptions et intégration des nouvelles technologies",
+                    text: "Rédige une analyse sur le passage à un modèle SaaS ou abonnement, avec étude des avantages et risques."
+                },
+                
+                // Finance
+                {
+                    id: "f1",
+                    category: "finance",
+                    categoryName: "Gestion Financière et Performance",
+                    subcategory: "Optimisation des ressources et gestion des risques",
+                    text: "Identifie les 10% de dépenses où nous pouvons faire des économies sans impacter la performance."
+                },
+                {
+                    id: "f2",
+                    category: "finance",
+                    categoryName: "Gestion Financière et Performance",
+                    subcategory: "Optimisation des ressources et gestion des risques",
+                    text: "Analyse nos marges bénéficiaires et propose une stratégie d'optimisation sur 12 mois."
+                },
+                {
+                    id: "f3",
+                    category: "finance",
+                    categoryName: "Gestion Financière et Performance",
+                    subcategory: "Optimisation des ressources et gestion des risques",
+                    text: "Développe un plan de diversification des revenus pour stabiliser notre croissance."
+                },
+                {
+                    id: "f4",
+                    category: "finance",
+                    categoryName: "Gestion Financière et Performance",
+                    subcategory: "Optimisation des ressources et gestion des risques",
+                    text: "Crée un tableau de bord financier avec les 10 KPI les plus stratégiques pour le suivi en temps réel."
+                },
+                {
+                    id: "f5",
+                    category: "finance",
+                    categoryName: "Gestion Financière et Performance",
+                    subcategory: "Optimisation des ressources et gestion des risques",
+                    text: "Simule l'impact de fluctuations économiques majeures et propose des stratégies d'anticipation."
+                },
+                {
+                    id: "f6",
+                    category: "finance",
+                    categoryName: "Gestion Financière et Performance",
+                    subcategory: "Optimisation des ressources et gestion des risques",
+                    text: "Développe une politique de pricing dynamique optimisée pour nos nouveaux marchés."
+                },
+                {
+                    id: "f7",
+                    category: "finance",
+                    categoryName: "Gestion Financière et Performance",
+                    subcategory: "Optimisation des ressources et gestion des risques",
+                    text: "Évalue les conséquences d'un changement fiscal et propose des ajustements proactifs."
+                },
+                
+                // Prompts Fabric (traduits)
+                {
+                    id: "fab1",
+                    category: "fabric",
+                    categoryName: "Analyse et Évaluation",
+                    subcategory: "Analyse de Contenu",
+                    text: "Analyse ce texte et identifie les principaux arguments, les preuves présentées, et évalue la solidité du raisonnement : [TEXTE]"
+                },
+                {
+                    id: "fab2",
+                    category: "fabric",
+                    categoryName: "Analyse et Évaluation",
+                    subcategory: "Analyse de Contenu",
+                    text: "Examine ce document et identifie les biais potentiels, les lacunes logiques, et les affirmations non étayées : [DOCUMENT]"
+                },
+                {
+                    id: "fab3",
+                    category: "fabric",
+                    categoryName: "Analyse et Évaluation",
+                    subcategory: "Analyse Comparative",
+                    text: "Compare et contraste ces deux perspectives sur [SUJET]. Identifie les points d'accord, de désaccord, et évalue la force de chaque argument."
+                },
+                {
+                    id: "fab4",
+                    category: "fabric",
+                    categoryName: "Création de Contenu",
+                    subcategory: "Rédaction",
+                    text: "Rédige un article de blog informatif et engageant sur [SUJET] qui explique les concepts clés de manière accessible pour un public non-expert."
+                },
+                {
+                    id: "fab5",
+                    category: "fabric",
+                    categoryName: "Création de Contenu",
+                    subcategory: "Rédaction",
+                    text: "Crée un guide étape par étape détaillé sur la façon de [TÂCHE], incluant des conseils pratiques et des erreurs courantes à éviter."
+                },
+                {
+                    id: "fab6",
+                    category: "fabric",
+                    categoryName: "Création de Contenu",
+                    subcategory: "Storytelling",
+                    text: "Développe une histoire captivante qui illustre l'impact de [CONCEPT/TECHNOLOGIE] sur la vie quotidienne, en mettant l'accent sur les aspects humains et émotionnels."
+                },
+                {
+                    id: "fab7",
+                    category: "fabric",
+                    categoryName: "Visualisation de Données",
+                    subcategory: "Interprétation",
+                    text: "Décris comment tu visualiserais efficacement ces données pour mettre en évidence les tendances principales et les insights : [DONNÉES]. Explique ton raisonnement pour chaque choix de visualisation."
+                },
+                {
+                    id: "fab8",
+                    category: "fabric",
+                    categoryName: "Visualisation de Données",
+                    subcategory: "Conception",
+                    text: "Suggère 3 types de visualisations différentes qui seraient appropriées pour communiquer [TYPE DE DONNÉES/INFORMATION] à [PUBLIC CIBLE]. Explique pourquoi chaque visualisation serait efficace."
+                },
+                {
+                    id: "fab9",
+                    category: "fabric",
+                    categoryName: "Explication et Clarification",
+                    subcategory: "Vulgarisation",
+                    text: "Explique [CONCEPT COMPLEXE] comme si tu le présentais à un enfant de 10 ans, en utilisant des analogies simples et un langage accessible."
+                },
+                {
+                    id: "fab10",
+                    category: "fabric",
+                    categoryName: "Explication et Clarification",
+                    subcategory: "Vulgarisation",
+                    text: "Décompose [SUJET TECHNIQUE] en ses composantes fondamentales et explique chacune d'elles en termes simples. Utilise des exemples concrets pour illustrer chaque point."
+                },
+                {
+                    id: "fab11",
+                    category: "fabric",
+                    categoryName: "Extraction d'Informations",
+                    subcategory: "Résumé",
+                    text: "Résume les points clés, les conclusions et les recommandations de ce document en 3-5 puces concises : [DOCUMENT]"
+                },
+                {
+                    id: "fab12",
+                    category: "fabric",
+                    categoryName: "Extraction d'Informations",
+                    subcategory: "Résumé",
+                    text: "Extrais les 5 insights les plus importants de cet article/rapport et explique pourquoi ils sont significatifs : [ARTICLE/RAPPORT]"
+                },
+                {
+                    id: "fab13",
+                    category: "fabric",
+                    categoryName: "Brainstorming et Idéation",
+                    subcategory: "Génération d'Idées",
+                    text: "Génère 10 idées créatives et innovantes pour [OBJECTIF/PROBLÈME]. Assure-toi que les idées varient en termes d'approche, de complexité et de ressources requises."
+                },
+                {
+                    id: "fab14",
+                    category: "fabric",
+                    categoryName: "Brainstorming et Idéation",
+                    subcategory: "Génération d'Idées",
+                    text: "Propose 5 approches non conventionnelles pour résoudre [PROBLÈME] qui pourraient être négligées par les méthodes traditionnelles."
+                },
+                {
+                    id: "fab15",
+                    category: "fabric",
+                    categoryName: "Planification et Stratégie",
+                    subcategory: "Planification de Projet",
+                    text: "Développe un plan de projet détaillé pour [OBJECTIF], incluant les étapes clés, les délais estimés, les ressources nécessaires et les potentiels obstacles à anticiper."
+                },
+                {
+                    id: "fab16",
+                    category: "fabric",
+                    categoryName: "Planification et Stratégie",
+                    subcategory: "Planification de Projet",
+                    text: "Crée une feuille de route stratégique pour atteindre [OBJECTIF À LONG TERME] sur les 12 prochains mois, avec des jalons spécifiques et mesurables."
+                },
+                {
+                    id: "fab17",
+                    category: "fabric",
+                    categoryName: "Feedback et Évaluation",
+                    subcategory: "Analyse Critique",
+                    text: "Évalue ce [PRODUIT/SERVICE/IDÉE] et fournis un feedback constructif sur ses forces, ses faiblesses et ses opportunités d'amélioration."
+                },
+                {
+                    id: "fab18",
+                    category: "fabric",
+                    categoryName: "Feedback et Évaluation",
+                    subcategory: "Analyse Critique",
+                    text: "Examine cette [PROPOSITION/PLAN] et identifie les risques potentiels, les angles morts et les hypothèses non vérifiées qui pourraient affecter son succès."
+                },
+                {
+                    id: "fab19",
+                    category: "fabric",
+                    categoryName: "Recherche et Analyse",
+                    subcategory: "Exploration",
+                    text: "Identifie les 5 tendances émergentes les plus significatives dans [INDUSTRIE/DOMAINE] et explique comment elles pourraient façonner l'avenir de ce secteur."
+                },
+                {
+                    id: "fab20",
+                    category: "fabric",
+                    categoryName: "Recherche et Analyse",
+                    subcategory: "Exploration",
+                    text: "Analyse l'état actuel de [TECHNOLOGIE/PRATIQUE] et prédis comment elle pourrait évoluer au cours des 5 prochaines années, en tenant compte des facteurs technologiques, sociaux et économiques."
+                },
+                {
+                    id: "fab21",
+                    category: "fabric",
+                    categoryName: "Prise de Décision",
+                    subcategory: "Analyse Décisionnelle",
+                    text: "Je dois décider entre [OPTION A] et [OPTION B]. Aide-moi à analyser cette décision en utilisant un cadre structuré qui considère les avantages, les inconvénients, les risques et les opportunités de chaque option."
+                },
+                {
+                    id: "fab22",
+                    category: "fabric",
+                    categoryName: "Prise de Décision",
+                    subcategory: "Analyse Décisionnelle",
+                    text: "Évalue ces 3 options pour [DÉCISION] en utilisant les critères suivants : [LISTE DE CRITÈRES]. Recommande l'option la plus appropriée en justifiant ton choix."
+                },
+                {
+                    id: "fab23",
+                    category: "fabric",
+                    categoryName: "Apprentissage et Développement",
+                    subcategory: "Plan d'Apprentissage",
+                    text: "Crée un plan d'apprentissage structuré pour maîtriser [COMPÉTENCE/SUJET] en partant de zéro. Inclus des ressources recommandées, des étapes progressives et des moyens d'évaluer la progression."
+                },
+                {
+                    id: "fab24",
+                    category: "fabric",
+                    categoryName: "Apprentissage et Développement",
+                    subcategory: "Plan d'Apprentissage",
+                    text: "Suggère une approche systématique pour améliorer mes compétences en [DOMAINE], avec des exercices pratiques spécifiques, des ressources d'apprentissage et un calendrier réaliste."
+                },
+                {
+                    id: "fab25",
+                    category: "fabric",
+                    categoryName: "Communication",
+                    subcategory: "Adaptation au Public",
+                    text: "Adapte ce message technique sur [SUJET] pour trois publics différents : des experts du domaine, des décideurs non techniques, et le grand public."
+                },
+                {
+                    id: "fab26",
+                    category: "fabric",
+                    categoryName: "Communication",
+                    subcategory: "Adaptation au Public",
+                    text: "Reformule cette communication [TEXTE] pour la rendre plus persuasive et engageante, tout en maintenant son exactitude et son intégrité."
+                },
+                {
+                    id: "fab27",
+                    category: "fabric",
+                    categoryName: "Résolution de Problèmes",
+                    subcategory: "Analyse de Problème",
+                    text: "Analyse ce problème [DESCRIPTION DU PROBLÈME] en profondeur. Identifie ses causes profondes, ses impacts, et propose une approche structurée pour le résoudre."
+                },
+                {
+                    id: "fab28",
+                    category: "fabric",
+                    categoryName: "Résolution de Problèmes",
+                    subcategory: "Analyse de Problème",
+                    text: "Décompose ce défi complexe [DÉFI] en problèmes plus petits et plus gérables. Pour chaque sous-problème, suggère des approches de résolution spécifiques."
+                },
+                {
+                    id: "fab29",
+                    category: "fabric",
+                    categoryName: "Créativité et Innovation",
+                    subcategory: "Pensée Latérale",
+                    text: "Propose 7 utilisations non conventionnelles et créatives pour [PRODUIT/TECHNOLOGIE] dans des contextes ou industries où il n'est pas traditionnellement utilisé."
+                },
+                {
+                    id: "fab30",
+                    category: "fabric",
+                    categoryName: "Créativité et Innovation",
+                    subcategory: "Pensée Latérale",
+                    text: "Imagine comment [CONCEPT/PRODUIT] pourrait évoluer si nous éliminions complètement cette contrainte : [CONTRAINTE]. Décris les nouvelles possibilités qui s'ouvriraient."
+                }
+            ];
+            
+            // Fonction pour générer la carte d'un prompt
+            function createPromptCard(prompt) {
+                return `
+                    <div class="prompt-card bg-gray-800 rounded-lg p-4 border border-gray-700 hover:border-gray-500 transition-all" data-category="${prompt.category}" data-id="${prompt.id}">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <span class="text-xs font-semibold px-2 py-1 rounded bg-gray-700 text-blue-300">${prompt.categoryName}</span>
+                                <span class="text-xs text-gray-400 ml-2">${prompt.subcategory}</span>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="save-prompt text-gray-400 hover:text-yellow-400 transition-colors" data-id="${prompt.id}">
+                                    <i class="far fa-bookmark"></i>
+                                </button>
+                                <button class="copy-prompt text-gray-400 hover:text-green-400 transition-colors" data-id="${prompt.id}">
+                                    <i class="far fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-white text-sm mt-2">${prompt.text}</p>
+                    </div>
+                `;
+            }
+            
+            // Fonction pour afficher les prompts filtrés
+            function displayPrompts(prompts) {
+                const container = document.getElementById('prompts-container');
+                if (!container) return;
+                
+                container.innerHTML = '';
+                
+                if (prompts.length === 0) {
+                    container.innerHTML = '<p class="text-gray-400 col-span-2 text-center py-8">Aucun prompt ne correspond à votre recherche.</p>';
+                    return;
+                }
+                
+                prompts.forEach(prompt => {
+                    container.innerHTML += createPromptCard(prompt);
+                });
+                
+                // Ajouter les écouteurs d'événements pour les boutons de copie et de sauvegarde
+                document.querySelectorAll('.copy-prompt').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const promptId = this.getAttribute('data-id');
+                        const prompt = promptsDatabase.find(p => p.id === promptId);
+                        if (prompt) {
+                            navigator.clipboard.writeText(prompt.text)
+                                .then(() => {
+                                    // Changer l'icône temporairement pour indiquer la copie
+                                    const icon = this.querySelector('i');
+                                    icon.classList.remove('far', 'fa-copy');
+                                    icon.classList.add('fas', 'fa-check');
+                                    this.classList.add('text-green-400');
+                                    
+                                    setTimeout(() => {
+                                        icon.classList.remove('fas', 'fa-check');
+                                        icon.classList.add('far', 'fa-copy');
+                                        this.classList.remove('text-green-400');
+                                    }, 2000);
+                                })
+                                .catch(err => {
+                                    console.error('Erreur lors de la copie: ', err);
+                                });
+                        }
+                    });
+                });
+                
+                document.querySelectorAll('.save-prompt').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const promptId = this.getAttribute('data-id');
+                        // Simuler la sauvegarde (dans une vraie application, cela serait stocké)
+                        const icon = this.querySelector('i');
+                        
+                        if (icon.classList.contains('far')) {
+                            // Sauvegarder
+                            icon.classList.remove('far', 'fa-bookmark');
+                            icon.classList.add('fas', 'fa-bookmark');
+                            this.classList.add('text-yellow-400');
+                        } else {
+                            // Retirer de la sauvegarde
+                            icon.classList.remove('fas', 'fa-bookmark');
+                            icon.classList.add('far', 'fa-bookmark');
+                            this.classList.remove('text-yellow-400');
+                        }
+                    });
+                });
+            }
+            
+            // Initialiser la page
+            function initPromptLibrary() {
+                // Afficher tous les prompts au chargement
+                displayPrompts(promptsDatabase);
+                
+                // Gérer les filtres de catégorie
+                document.querySelectorAll('.category-filter').forEach(button => {
+                    button.addEventListener('click', function() {
+                        // Mettre à jour l'état actif des boutons
+                        document.querySelectorAll('.category-filter').forEach(btn => {
+                            btn.classList.remove('active', 'bg-blue-600');
+                            btn.classList.add('bg-gray-700');
+                        });
+                        this.classList.add('active', 'bg-blue-600');
+                        this.classList.remove('bg-gray-700');
+                        
+                        const category = this.getAttribute('data-category');
+                        const searchText = document.getElementById('prompt-search').value.toLowerCase();
+                        
+                        // Filtrer les prompts
+                        let filteredPrompts = promptsDatabase;
+                        
+                        if (category !== 'all') {
+                            filteredPrompts = filteredPrompts.filter(prompt => prompt.category === category);
+                        }
+                        
+                        if (searchText) {
+                            filteredPrompts = filteredPrompts.filter(prompt => 
+                                prompt.text.toLowerCase().includes(searchText) || 
+                                prompt.categoryName.toLowerCase().includes(searchText) ||
+                                prompt.subcategory.toLowerCase().includes(searchText)
+                            );
+                        }
+                        
+                        displayPrompts(filteredPrompts);
+                    });
+                });
+                
+                // Gérer la recherche
+                const searchInput = document.getElementById('prompt-search');
+                const searchButton = document.getElementById('search-button');
+                
+                function performSearch() {
+                    const searchText = searchInput.value.toLowerCase();
+                    const activeCategory = document.querySelector('.category-filter.active').getAttribute('data-category');
+                    
+                    let filteredPrompts = promptsDatabase;
+                    
+                    if (activeCategory !== 'all') {
+                        filteredPrompts = filteredPrompts.filter(prompt => prompt.category === activeCategory);
+                    }
+                    
+                    if (searchText) {
+                        filteredPrompts = filteredPrompts.filter(prompt => 
+                            prompt.text.toLowerCase().includes(searchText) || 
+                            prompt.categoryName.toLowerCase().includes(searchText) ||
+                            prompt.subcategory.toLowerCase().includes(searchText)
+                        );
+                    }
+                    
+                    displayPrompts(filteredPrompts);
+                }
+                
+                searchButton.addEventListener('click', performSearch);
+                searchInput.addEventListener('keyup', function(e) {
+                    if (e.key === 'Enter') {
+                        performSearch();
+                    }
+                });
+            }
+            
+            // Initialiser la bibliothèque
+            initPromptLibrary();
+        }
+    </script>
 </body>
 </html> 
+
